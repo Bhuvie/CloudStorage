@@ -1,0 +1,10 @@
+applications:
+- path: .
+  memory: 128M
+  instances: 1
+  name: bhuvanesh0051
+  host: bhuvanesh0051
+  domain: mybluemix.net
+  disk_quota: 1024M
+  services:
+   - Object-Storage

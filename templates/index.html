@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web App by Bhuvanesh</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="/static/stylesheets/style.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
+	<script>
+
+					function loaddata(){
+						$.ajax({
+							type: "POST",
+							url: "/viewcf",
+						    success: function(data) { 
+						    	alert(data);
+						    	$("#clist").html(data);
+						    }
+					});
+					}
+					
+					
+					
+					function loadfile(){
+						$.ajax({
+							type: "POST",
+							url: "/viewf",
+							success: function(response){
+								alert(response);
+						    	$("#flist").html(response);
+							}});
+					}
+					
+					function createcont(input){
+						$.ajax({
+							type: "POST",
+							url: "/createc",
+							data: { mydata: input },
+							success: function(response){
+								alert(response);
+							}});
+					}
+					
+					function createfile(input,input1,input2,input3){
+						$.ajax({
+							type: "POST",
+							url: "/createf",
+							data: { mydata: input, mydata1: input1, mydata2: input2, mydata3: input3 },
+							success: function(response){
+								alert(response);
+								$("#efd").html(response);
+							}});
+					}
+					
+					function delcont(input){
+						$.ajax({
+							type: "POST",
+							url: "/delcont",
+							data: { mydata: input },
+							success: function(response){
+								alert(response);
+							}});
+					}
+					
+					function delfile(input,input1){
+						$.ajax({
+							type: "POST",
+							url: "/delfile",
+							data: { mydata: input, mydata1: input1 },
+							success: function(response){
+								alert(response);
+							}});
+					}
+					
+					function downfile(input,input1,input2){
+						$.ajax({
+							type: "POST",
+							url: "/downfile",
+							data: { mydata: input, mydata1: input1, mydata2:input2 },
+							success: function(response){
+								alert(response);
+								download123(input1,response);
+							}});
+					}
+					
+					function download123(filename,text) {
+					  var element = document.createElement('a');
+					  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+					  element.setAttribute('download', filename);
+
+					  element.style.display = 'none';
+					  document.body.appendChild(element);
+
+					  element.click();
+
+					  document.body.removeChild(element);
+					}
+					
+					function delfiletime(input){
+						$.ajax({
+							type: "POST",
+							url: "/delfiletim",
+							data: { mydata: input },
+							success: function(response){
+								alert(response);
+							}});
+					}
+					
+					$(function() {
+					    $('#submit').click(function() {
+					        event.preventDefault();
+					        var form_data = new FormData($('#uploadform')[0]);
+					        $.ajax({
+					            type: 'POST',
+					            url: '/uploadajax',
+					            data: form_data,
+					            contentType: false,
+					            processData: false
+					        }).done(function(dat){
+					        	$("#efd").html(dat);
+					        	alert(dat);
+					            console.log('Success!');
+					        }).fail(function(data){
+					            alert('error!');
+					        });
+					    });
+					}); 
+					
+					
+	</script>
+</head>
+<body>
+	<form><table style="padding-top:5%;">
+	<tr><td>Container Operations:</td><td></td><td></td><td></td></tr>
+				<tr>
+				<td>Enter Container Name:</td>
+				<td><input name="textbox1" id="textbox1" type="text" /></td>
+				<td></td>
+				<td></td>
+				</tr>
+				<tr>
+				<td><button id="createc" type="button" onclick="createcont(document.getElementById('textbox1').value);">Create Container</button></td>
+				<td><button id="delc" type="button" onclick="delcont(document.getElementById('textbox1').value);">Delete Container</button></td>
+				<td></td>
+				<td></td>
+				</tr>
+				
+	</table></form>
+	<form><div style="padding-bottom: 20px;padding-left:250px; "><label style="padding-right:20px;">Container List</label><button id="submitbutton" type="button" onclick="loaddata();">View all the Containers</button></div></form>
+	<table id="clist" border="1"></table>
+
+	<form><table style="padding-top:5%;">
+        <tr><td>File Operations:-</td><td></td><td></td><td></td></tr>
+			    <tr>
+                <td><label>Enter Container Name:</label></td>
+				<td><input name="textbox2" id="textbox2" type="text" /></td>
+				<td><label>Enter File Name:</label></td>
+				<td><input name="textbox3" id="textbox3" type="text" /></td>
+                </tr>
+                <tr><td>Key: <input name="textbox7" id="textbox7" type="text" maxlength="8"/></td><td></td><td></td><td></td></tr>
+                <tr>
+                     <td><label>Enter File Data:</label></td>
+				<td></td>
+				<td colspan="2"><label>Encrypted Data Inside the file/Error Msg</label></td>
+				
+                </tr>
+				<tr>
+                    <td colspan="2"><textarea id="fd" rows="10" cols="49"></textarea></td>
+                    <td colspan="2"><textarea id="efd" rows="10" cols="42"></textarea></td>
+                </tr>
+				<tr>
+                    <td><button id="createf" type="button" onclick="createfile(document.getElementById('textbox2').value,document.getElementById('textbox3').value,document.getElementById('fd').value,document.getElementById('textbox7').value);">Create File</button></td>
+				<td><button id="delf" type="button" onclick="delfile(document.getElementById('textbox2').value,document.getElementById('textbox3').value);">Delete File</button></td>
+				<td><button id="downf" type="button" onclick="downfile(document.getElementById('textbox2').value,document.getElementById('textbox3').value,document.getElementById('textbox7').value);">Download File</button></td>
+                <td></td>
+                </tr>
+			
+		
+			
+	</table></form>
+	<div>
+            <h3>File Upload:</h3>
+            <form id="uploadform" method="post" enctype="multipart/form-data">
+    <label for="file">Select a file</label>
+    <input name="file" type="file"> <br />
+    Container Name: <input name="textbox5" id="textbox5" type="text" />  <br />
+    Key: <input name="textbox6" id="textbox6" type="text" maxlength="8"/>
+    
+    <button id="submit" type="button">Upload</button>
+</form>
+<br /> 
+        </div>
+	
+	
+    <form><div style="padding-bottom: 20px;padding-left:250px;padding-top: 30px "><label style="padding-right:20px;">File List</label><button id="viewfiles" type="button" onclick="loadfile();">View all the Files</button></div></form>
+    
+	<table id="flist" border="1">
+			</table>
+			
+	
+	
+	
+</body>
+</html>
