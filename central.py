@@ -11,8 +11,7 @@ from _codecs import decode
 from datetime import datetime
 
 #Bhuvanesh Rajakarthikeyan
-#CSE6311-001 Programming Assignment 1
-#Student ID: 1001410051
+#Student ID: 0051
 
 # Emit Bluemix deployment event
 cf_deployment_tracker.track()
